@@ -1,4 +1,4 @@
-﻿	using UnityEngine;
+	using UnityEngine;
 	using UnityEngine.UI;
 	using System.Collections;
 	
@@ -7,6 +7,7 @@
 	public Text text;
 	private enum States {cell, idcard_0, cardsnapped_0, lockport_0, lock_0, lock_1, usb, cell_usb, keypad, unauthorised};
 	private States myState;
+	public MovieTexture movieTexture;
 
 	// Use this for initializationf\
 	
@@ -29,41 +30,42 @@
 		else if (myState == States.unauthorised) 		{state_unauthorised();}
 	}
 	void state_cell() {
-		text.text = "You are wake up dazed in an abandoned hospital bedroom. There is " + 
+		text.text = "You wake up in room 7821 at Royston Hospital. There is " + 
 					"an ID card (0009) on the bed, a usb stick on the floor, and the door " +
-					"is locked.\n\n " + 
-					"Press C to pickup the card, U to view USB stick and D to view the door" ;
+					"is locked.\n\n" + 
+					"Press C to pick up the card, U to view usb stick and D to view the door" ;
 		if (Input.GetKeyDown(KeyCode.C)) {myState = States.idcard_0;}
 		else if (Input.GetKeyDown(KeyCode.U)) {myState = States.usb;}
 		else if (Input.GetKeyDown(KeyCode.D)) {myState = States.lock_0;}
 	}
 	void state_idcard_0() {
-		text.text = "Maybe this could open the door \n\n" +
-					"Press T to slide the card down over the lock, press C to insert the card into the reader or R to Return to searching your bedroom" ;
-		if (Input.GetKeyDown(KeyCode.T)) {myState = States.cardsnapped_0;}
+		text.text = "Maybe this could open the door? \n\n" +
+			"Press S to slide the card down over the lock, press C to insert the card into the reader or R to Return to your bedroom" ;
+		if (Input.GetKeyDown(KeyCode.S)) {myState = States.cardsnapped_0;}
 		else if (Input.GetKeyDown(KeyCode.C)) {myState = States.unauthorised;}			
 		else if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
 	void state_cardsnapped_0() {
-		text.text = "Damn it! The card does not fit in\n\n" +
-					"Press R to Return to searching your bedroom" ;		
+		text.text = "Damn it! The card does not fit\n\n" +
+					"Press R to Return to your bedroom" ;		
 		if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
 	void state_unauthorised() {
 		text.text = "*******Unauthorised access******* \n\n" +
-					"Press R to Return to searching your bedroom";
+					"*******User 0009 was deactivated in March 2031******* \n\n" +
+					"Press R to Return to your bedroom";
 		if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
 	void state_lock_0() {
 		text.text = "There is a card reader next to the door and a small screen.\n\n" +
-					"Press K to view the keypad, or R to Return to searching your bedroom";
+					"Press K to view the keypad, or R to Return to your bedroom";
 		if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 		else if (Input.GetKeyDown(KeyCode.K)) {myState = States.keypad;}
 	}
 	void state_usb() {
-		text.text = "Wow  - usb 3.0, some really ancient tech \n\n" +
+		text.text = "Wow  - usb 3.0, what year is this?! \n\n" +
 					"Time does fly \n\n" +
-					"Press U to take the usb stick, or R to Return to your bedroom" ;
+					"Press U to use the usb stick, or R to Return to your bedroom" ;
 		if (Input.GetKeyDown(KeyCode.U)) {myState = States.cell_usb;}
 		else if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
@@ -76,23 +78,23 @@
 	}
 	void state_lockport_0() {
 		text.text = "Error! A device connected to the system is not functioning \n\n" +
-					"Guess that didnt work.\n\n" +
-					"Press R to Return to searching your bedroom" ;
+					"Must be running windows!.\n\n" +
+					"Press R to Return to your bedroom" ;
 		if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
 	void state_keypad() {
 		text.text = "Please enter authorisation code\n\n"+
 					"*   *   *   *\n\n" +
-					"Attempt to enter code or press R to Return to searching your bedroom" ;
+					"Attempt to enter code or press R to Return to your bedroom" ;
 		if (Input.GetKeyDown(KeyCode.Alpha9)) Application.LoadLevel("Fail");		
 		else if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell;}
 	}
 	void state_lock_1() {
-		text.text = "You put the usb stick in the card reader port \n\n" +
-					"*******Unauthorised access******* \n" +
-					"Alarm will sound in 10seconds\n" +
-					"Press C to Continue, or R to Return to your bedroom" ;
+		text.text = "*******Unauthorised access******* \n\n" +
+					"Alarm will sound in 10seconds\n\n" +
+					"Press C to Continue, U to use USB or R to Return to your bedroom" ;	
 		if (Input.GetKeyDown(KeyCode.C)) Application.LoadLevel("Complete");
+		if (Input.GetKeyDown(KeyCode.U)) {myState = States.cell_usb;}
 		else if (Input.GetKeyDown(KeyCode.R)) {myState = States.cell_usb;}
 	}
 }
